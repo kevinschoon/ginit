@@ -1,8 +1,3 @@
-/*
-Most of the code here is just copied over from Linuxkit's init package,
-made slightly more readable, and for consumption as a library.
-https://github.com/linuxkit/linuxkit/blob/master/pkg/init/cmd/init/init.go
-*/
 package ginit
 
 import (
@@ -203,6 +198,9 @@ func CopyFileInfo(info os.FileInfo, path string) error {
 // a new mount point and then pivots to
 // the new location. Opts.NewRoot must
 // already be mounted for this to work.
+
+// Most of this code comes from Linuxkit's init package:
+// https://github.com/linuxkit/linuxkit/blob/master/pkg/init/cmd/init/init.go
 func SwitchRoot(opts SwitchOptions) error {
 	// Copy the directory tree of the current
 	// root path into the new mount point
