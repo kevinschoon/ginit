@@ -1,4 +1,4 @@
-package mount
+package ginit
 
 import "golang.org/x/sys/unix"
 

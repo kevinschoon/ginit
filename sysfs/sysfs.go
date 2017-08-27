@@ -1,56 +1,56 @@
-package subsystem
+package sysfs
 
 import (
-	"github.com/mesanine/ginit/mount"
+	"github.com/mesanine/ginit"
 )
 
-func Sysfs() Subsystem {
+func Subsystem() ginit.Subsystem {
 	data := "nodev,noexec,nosuid"
-	return Subsystem{
-		Mounts: []mount.MountArgs{
-			mount.MountArgs{
+	return ginit.Subsystem{
+		Mounts: []ginit.MountArgs{
+			ginit.MountArgs{
 				Source: "sysfs",
 				Target: "/sys",
 				FSType: "sysfs",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "securityfs",
 				Target: "/sys/kernel/security",
 				FSType: "securityfs",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "debugfs",
 				Target: "/sys/kernel/debug",
 				FSType: "debugfs",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "configfs",
 				Target: "/sys/kernel/config",
 				FSType: "configfs",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "fusectl",
 				Target: "/sys/fs/fuse/connections",
 				FSType: "fusectl",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "selinuxfs",
 				Target: "/sys/fs/selinux",
 				FSType: "selinuxfs",
 				Data:   "nosuid,noexec",
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "pstore",
 				Target: "/sys/fs/pstore",
 				FSType: "pstore",
 				Data:   data,
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "pstore",
 				Target: "/sys/firmware/efi/efivars",
 				FSType: "efivarfs",

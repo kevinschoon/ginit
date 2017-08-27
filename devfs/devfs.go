@@ -1,15 +1,14 @@
-package subsystem
+package devfs
 
 import (
 	"github.com/mesanine/ginit"
-	"github.com/mesanine/ginit/mount"
 	"golang.org/x/sys/unix"
 )
 
-func DevFS() Subsystem {
-	return Subsystem{
-		Mounts: []mount.MountArgs{
-			mount.MountArgs{
+func DevFS() ginit.Subsystem {
+	return ginit.Subsystem{
+		Mounts: []ginit.MountArgs{
+			ginit.MountArgs{
 				Source: "dev",
 				Target: "/dev",
 				FSType: "devtmpfs",
@@ -17,19 +16,19 @@ func DevFS() Subsystem {
 				// TODO: What should be configurable here?
 				Data: "nodev,noexec,relatime,size=10m,nr_inodes=248418,mode=755",
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "mqueue",
 				Target: "/dev/mqueue",
 				FSType: "mqueue",
 				Data:   "noexec,nosuid,nodev",
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "shm",
 				Target: "/dev/shm",
 				FSType: "tmpfs",
 				Data:   "noexec,nosuid,nodev,mode=1777",
 			},
-			mount.MountArgs{
+			ginit.MountArgs{
 				Source: "devpts",
 				Target: "/dev/pts",
 				FSType: "devpts",
