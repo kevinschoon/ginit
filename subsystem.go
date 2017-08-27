@@ -1,5 +1,9 @@
 package ginit
 
+import (
+	"golang.org/x/sys/unix"
+)
+
 type Subsystem struct {
 	Nodes  []Node
 	Links  []Link
@@ -15,7 +19,7 @@ func Load(subs []Subsystem) error {
 			}
 		}
 		for _, node := range sub.Nodes {
-			err := Mknod(node.Name, node.Mode, node.Type, node.Major, node.Minor)
+			err := unix.Mknod(node.Name, node.Mode|node.Type, int(unix.Mkdev(node.Major, node.Minor)))
 			if err != nil {
 				return err
 			}
