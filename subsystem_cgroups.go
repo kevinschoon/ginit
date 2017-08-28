@@ -1,13 +1,12 @@
-package cgroups
+package ginit
 
 import (
 	"fmt"
-	"github.com/mesanine/ginit"
 )
 
-func Cgroups(controllers []ginit.Controller) ginit.Subsystem {
-	mounts := []ginit.MountArgs{
-		ginit.MountArgs{
+func Cgroups(controllers []Controller) Subsystem {
+	mounts := []MountArgs{
+		MountArgs{
 			Target: "/sys/fs/cgroup",
 			Source: "cgroup_root",
 			FSType: "tempfs",
@@ -16,7 +15,7 @@ func Cgroups(controllers []ginit.Controller) ginit.Subsystem {
 	}
 	for _, controller := range controllers {
 		if controller.Enabled {
-			mounts = append(mounts, ginit.MountArgs{
+			mounts = append(mounts, MountArgs{
 				Target: fmt.Sprintf("/sys/fs/cgroup/%s", controller.Name),
 				Source: controller.Name,
 				FSType: "cgroup",
@@ -24,7 +23,7 @@ func Cgroups(controllers []ginit.Controller) ginit.Subsystem {
 			})
 		}
 	}
-	return ginit.Subsystem{
+	return Subsystem{
 		Mounts: mounts,
 	}
 }

@@ -1,14 +1,13 @@
-package devfs
+package ginit
 
 import (
-	"github.com/mesanine/ginit"
 	"golang.org/x/sys/unix"
 )
 
-func DevFS() ginit.Subsystem {
-	return ginit.Subsystem{
-		Mounts: []ginit.MountArgs{
-			ginit.MountArgs{
+func DevFS() Subsystem {
+	return Subsystem{
+		Mounts: []MountArgs{
+			MountArgs{
 				Source: "dev",
 				Target: "/dev",
 				FSType: "devtmpfs",
@@ -16,55 +15,55 @@ func DevFS() ginit.Subsystem {
 				// TODO: What should be configurable here?
 				Data: "nodev,noexec,relatime,size=10m,nr_inodes=248418,mode=755",
 			},
-			ginit.MountArgs{
+			MountArgs{
 				Source: "mqueue",
 				Target: "/dev/mqueue",
 				FSType: "mqueue",
 				Data:   "noexec,nosuid,nodev",
 			},
-			ginit.MountArgs{
+			MountArgs{
 				Source: "shm",
 				Target: "/dev/shm",
 				FSType: "tmpfs",
 				Data:   "noexec,nosuid,nodev,mode=1777",
 			},
-			ginit.MountArgs{
+			MountArgs{
 				Source: "devpts",
 				Target: "/dev/pts",
 				FSType: "devpts",
 				Data:   "noexec,nosuid,gid=5,mode=0620",
 			},
 		},
-		Nodes: []ginit.Node{
-			ginit.Node{
+		Nodes: []Node{
+			Node{
 				Name:  "/dev/console",
 				Mode:  0600,
 				Type:  unix.S_IFCHR,
 				Major: 5,
 				Minor: 1,
 			},
-			ginit.Node{
+			Node{
 				Name:  "/dev/console",
 				Mode:  0620,
 				Type:  unix.S_IFCHR,
 				Major: 4,
 				Minor: 1,
 			},
-			ginit.Node{
+			Node{
 				Name:  "/dev/console",
 				Mode:  0666,
 				Type:  unix.S_IFCHR,
 				Major: 5,
 				Minor: 0,
 			},
-			ginit.Node{
+			Node{
 				Name:  "/dev/console",
 				Mode:  0666,
 				Type:  unix.S_IFCHR,
 				Major: 1,
 				Minor: 3,
 			},
-			ginit.Node{
+			Node{
 				Name:  "/dev/console",
 				Mode:  0660,
 				Type:  unix.S_IFCHR,
@@ -72,23 +71,23 @@ func DevFS() ginit.Subsystem {
 				Minor: 11,
 			},
 		},
-		Links: []ginit.Link{
-			ginit.Link{
+		Links: []Link{
+			Link{
 				Name:   "/proc/self/fd",
 				Target: "/dev/stdin",
 				Force:  true,
 			},
-			ginit.Link{
+			Link{
 				Name:   "/proc/self/fd/0",
 				Target: "/dev/stdout",
 				Force:  true,
 			},
-			ginit.Link{
+			Link{
 				Name:   "/proc/self/fd/1",
 				Target: "/dev/stdout",
 				Force:  true,
 			},
-			ginit.Link{
+			Link{
 				Name:   "/proc/self/fd/2",
 				Target: "/dev/stderr",
 				Force:  true,

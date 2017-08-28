@@ -69,14 +69,3 @@ func TmpFS(path string, percentage int) MountArgs {
 		Data:   data,
 	}
 }
-
-// ProcFS returns arguments for mounting a /proc filesystem
-func ProcFS() MountArgs {
-	return MountArgs{
-		Source: "proc",
-		Target: "/proc",
-		FSType: "proc",
-		Flags:  0,
-		Data:   "nodev,nosuid,noexec,relatime",
-	}
-}
