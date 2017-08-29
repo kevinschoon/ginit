@@ -31,6 +31,7 @@ func Mount(args MountArgs, opts ...MountOption) error {
 			return err
 		}
 	}
+
 	return unix.Mount(args.Source, args.Target, args.FSType, args.Flags, args.Data)
 }
 

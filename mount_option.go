@@ -7,7 +7,7 @@ import (
 // Mkdir creates the target directory
 // if it is missing before performing
 // a mount operation.
-func Mkdir() MountOption {
+func Mkdir(mode os.FileMode) MountOption {
 	return func(args MountArgs) MountArgs {
 		return MountArgs{
 			Source: args.Source,
@@ -21,7 +21,7 @@ func Mkdir() MountOption {
 						return err
 					}
 				}
-				return os.MkdirAll(args.Target, 0755)
+				return os.MkdirAll(args.Target, mode)
 			},
 		}
 	}

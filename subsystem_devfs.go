@@ -13,26 +13,26 @@ func DevFS() Subsystem {
 				FSType: "devtmpfs",
 				// TODO: What are nr_inodes?
 				// TODO: What should be configurable here?
-				Data: "nodev,noexec,relatime,size=10m,nr_inodes=248418,mode=755",
+				Data: "nosuid,noexec,relatime,size=10m,nr_inodes=248418,mode=755",
 			},
-			MountArgs{
+			Mkdir(1777)(MountArgs{
 				Source: "mqueue",
 				Target: "/dev/mqueue",
 				FSType: "mqueue",
 				Data:   "noexec,nosuid,nodev",
-			},
-			MountArgs{
+			}),
+			Mkdir(0777)(MountArgs{
 				Source: "shm",
 				Target: "/dev/shm",
 				FSType: "tmpfs",
 				Data:   "noexec,nosuid,nodev,mode=1777",
-			},
-			MountArgs{
+			}),
+			Mkdir(0755)(MountArgs{
 				Source: "devpts",
 				Target: "/dev/pts",
 				FSType: "devpts",
 				Data:   "noexec,nosuid,gid=5,mode=0620",
-			},
+			}),
 		},
 		Nodes: []Node{
 			Node{
@@ -43,28 +43,28 @@ func DevFS() Subsystem {
 				Minor: 1,
 			},
 			Node{
-				Name:  "/dev/console",
+				Name:  "/dev/tty1",
 				Mode:  0620,
 				Type:  unix.S_IFCHR,
 				Major: 4,
 				Minor: 1,
 			},
 			Node{
-				Name:  "/dev/console",
+				Name:  "/dev/tty",
 				Mode:  0666,
 				Type:  unix.S_IFCHR,
 				Major: 5,
 				Minor: 0,
 			},
 			Node{
-				Name:  "/dev/console",
+				Name:  "/dev/null",
 				Mode:  0666,
 				Type:  unix.S_IFCHR,
 				Major: 1,
 				Minor: 3,
 			},
 			Node{
-				Name:  "/dev/console",
+				Name:  "/dev/kmsg",
 				Mode:  0660,
 				Type:  unix.S_IFCHR,
 				Major: 1,
