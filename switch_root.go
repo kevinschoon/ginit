@@ -219,7 +219,13 @@ func SwitchRoot(opts SwitchOptions) error {
 		return err
 	}
 	// mount --move cwd (/mnt) to /
-	if err := unix.Mount(".", "/", "", unix.MS_MOVE, ""); err != nil {
+	if err := Mount(
+		MountArgs{
+			Source: ".",
+			Target: "/",
+			Flags:  unix.MS_MOVE,
+		},
+	); err != nil {
 		return err
 	}
 	// chroot to .
