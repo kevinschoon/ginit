@@ -1,28 +1,65 @@
 package ginit
 
 import (
-	"fmt"
+	"bufio"
 	"os"
 	"os/exec"
+	"sync"
 )
 
-type ScriptOptions struct {
-	Path string
+type ScriptArgs struct {
+	Cmd  string
 	Args []string
-	Env  []string
+	// OnStdout is passed each line
+	// the script writes to stdout
+	OnStdout func(string)
+	// OnStderr is passed each line
+	// the script writes to stderr
+	OnStderr func(string)
 }
 
-func RunScript(opts ScriptOptions) error {
-	cmd := exec.Command(opts.Path, opts.Args...)
-	if len(opts.Env) == 0 {
-		cmd.Env = os.Environ()
-	} else {
-		cmd.Env = opts.Env
+// Call executes the script parameters copying the
+// existing environment into the command. Call blocks
+// until the command is finished and Stdout/Stderr
+// have been synchronized with OnStdout/OnSterr functions.
+func Call(args ScriptArgs) error {
+	cmd := exec.Command(args.Cmd, args.Args...)
+	cmd.Env = os.Environ()
+	var wg sync.WaitGroup
+	if args.OnStdout != nil {
+		wg.Add(1)
+		stdout, err := cmd.StdoutPipe()
+		if err != nil {
+			return err
+		}
+		go func() {
+			defer wg.Done()
+			scanner := bufio.NewScanner(stdout)
+			for scanner.Scan() {
+				args.OnStdout(scanner.Text())
+			}
+		}()
 	}
-	raw, err := cmd.CombinedOutput()
+	if args.OnStderr != nil {
+		wg.Add(1)
+		stderr, err := cmd.StderrPipe()
+		if err != nil {
+			return err
+		}
+		go func() {
+			defer wg.Done()
+			scanner := bufio.NewScanner(stderr)
+			for scanner.Scan() {
+				args.OnStderr(scanner.Text())
+			}
+		}()
+	}
+	err := cmd.Start()
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(raw))
-	return nil
+	// Ensure any stdout/stderr function
+	// calls are synchronized before exiting.
+	wg.Wait()
+	return cmd.Wait()
 }
